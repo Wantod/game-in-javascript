@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Game</title>
+	<style type="text/css">
+		body{background-color: #f39c12;min-width:587px; }
+		#canvas{
+			position:absolute;
+			left:0px;right:0px;top:70px;
+			margin:auto;
+		}
+		#jeux{
+			font-family: Arial;
+			font-size: 20px;
+			width: 200px;
+			float: left;
+		}
+		input,button{
+			width: 100px;
+			padding: 7px;
+			margin-top: -7px;
+		}
+
+		#body{ position:absolute; z-index: 1;top:0;left:0;width: 100%;height: 100%;background-color: rgba(0,0,0,0.8);display:none;}
+		#gagnier,#perdu,#rejouer,#fini{
+			position:absolute;z-index: 100;top:0;left:0;right:0;bottom: 0;
+			width: 400px;height: 100px;
+			border-radius: 3px;
+			background-color: #34495e;
+			color:#fff;
+			text-align: center;
+			font-family: 'Open sans';
+			font-size: 2em;
+			margin:auto;
+			padding: 20px 0 0 0;
+			display:none;
+		}
+		#gagnier input,#perdu input,#rejouer input{
+			margin: 0 50px 0 50px;
+			background-color: #e74c3c;
+			border: 0;border-radius: 2px;
+		}
+		#gagnier input:hover,#perdu input:hover,#rejouer input:hover{
+			background-color: #c0392b;
+			cursor:pointer;
+		}
+		#gagnier,#fini{background-color: #2ecc71;}
+		button{
+			background-color: #e74c3c;
+			border:none;
+			padding:10px;margin:2px;
+			color:#fff;font-weight:bold;border-radius: 2px;
+		}
+		button:hover{ background-color: #c0392b;cursor:pointer;}
+		#niveau{
+			background-color: #16a085;
+			padding:9px;margin:2px;
+			color:#fff;font-weight:bold;border-radius: 2px;		
+			top:-1px;
+			width:130px;
+			float: left;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="jeux"></div>
+	<div id="niveau"></div>
+	<button onclick="AlertRejouer();">rejouer</button>
+	<canvas id="canvas"></canvas>
+
+	<div id="body"></div>
+
+	<div id="gagnier"> Bien joué !<br><input type="submit" value="suivant" onclick="continuer();"></div>
+	<div id="fini"> Bien joué !<br>Tu as fini!</div>
+	<div id="perdu">Perdu, veux tu rejouer ?<br><input type="submit" value="oui" onclick="rejouer();"><input type="submit" value="non"></div>
+	<div id="rejouer">Veux tu vraiment rejouer<br><input type="submit" value="oui" onclick="rejouer();"><input type="submit" value="non" onclick="annulerRejouer();"></div>
+
+	<script type="text/javascript">
+		var jeux = true;
+		// Niveau
+		var niveau = new Niveau();
+		niveau.afficher();
+
+		var map = Array();
+	//la map
+
+	map.push([
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    28,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+
+	map.push([
+	    28,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+	    1,1,1,0,0,0,1,1,1,0,1,1,1,1,1,1,
+	    0,0,1,0,0,0,1,0,1,1,1,0,0,0,0,1,
+	    0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,
+	    0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,
+	    0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,
+	    0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,
+	    0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+
+	map.push([
+	    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	    1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	    1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	    1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	    1,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,
+	    1,0,0,0,1,1,0,0,0,0,1,1,0,0,0,1,
+	    1,0,0,0,1,1,0,0,0,0,1,1,0,0,0,1,
+	    1,0,0,0,1,1,0,0,0,0,1,1,0,0,0,1,
+	    1,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,
+	    1,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,
+	    1,0,0,0,1,1,0,0,0,0,1,1,0,0,0,1,
+	    1,0,0,0,1,1,0,0,0,0,1,1,0,0,1,1,
+	    1,0,0,0,1,1,0,0,0,0,1,1,0,0,1,1,
+	    1,0,0,0,1,1,0,0,0,0,1,1,0,0,1,1,
+	    1,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1,
+	    1,1,1,1,1,1,1,0,0,0,0,28,1,1,1,1]);
+
+	map.push([
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,
+	    0,0,0,0,0,1,28,1,1,0,0,0,1,1,1,0,
+	    0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,
+	    0,0,0,0,1,1,1,1,1,1,0,1,1,1,0,0,
+	    0,0,0,0,1,0,0,0,0,1,0,0,1,1,0,0,
+	    0,1,1,1,1,0,0,0,0,1,1,1,1,1,0,0,
+	    0,1,1,1,1,0,0,0,0,1,1,1,1,1,0,0,
+	    0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,
+	    0,0,0,0,1,0,1,1,0,1,0,0,0,0,0,0,
+	    0,0,0,0,1,0,1,1,0,1,0,0,0,0,0,0,
+	    0,0,0,0,1,0,1,1,0,1,0,0,0,0,0,0,
+	    0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+
+	map.push([
+	    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	    1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	    1,1,0,1,1,0,0,0,0,1,1,1,1,1,1,1,
+	    0,1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,
+	    0,1,0,1,0,1,28,1,0,0,0,0,1,0,1,1,
+	    1,1,0,1,0,1,1,1,0,1,1,1,1,0,1,1,
+	    1,0,0,1,0,1,1,0,1,1,0,1,1,0,0,0,
+	    1,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,
+	    1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,
+	    1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,
+	    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	    1,1,1,0,1,1,0,0,0,1,1,0,0,1,1,1,
+	    1,0,1,0,1,1,1,1,1,1,1,1,1,1,0,1,
+	    1,1,1,0,1,0,0,0,0,0,1,1,0,0,1,1,
+	    0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,0,
+	    0,1,1,1,1,1,0,0,0,0,0,1,1,1,1,0]);
+
+	map.push([
+	    1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,
+	    1,0,1,1,1,1,0,1,1,1,0,1,1,0,1,1,
+	    28,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,
+	    1,1,1,1,1,1,1,0,1,0,1,0,0,1,0,0,
+	    1,0,1,0,1,0,1,1,1,1,1,0,1,1,1,1,
+	    1,1,1,0,1,1,1,1,0,1,0,0,1,0,1,1,
+	    0,0,1,1,1,0,0,1,1,1,1,1,1,0,1,1,
+	    1,1,1,0,1,1,1,1,1,0,1,0,1,1,1,1,
+	    1,1,1,0,1,1,0,1,1,0,1,1,1,0,0,1,
+	    1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,
+	    1,0,1,0,0,1,0,0,0,0,1,1,1,1,1,1,
+	    1,0,1,1,1,1,1,1,1,0,0,0,0,1,0,1,
+	    1,1,1,1,0,0,1,0,1,0,1,1,1,1,1,1,
+	    0,0,0,1,0,1,1,1,1,0,1,0,1,1,0,1,
+	    0,0,1,1,0,1,0,1,0,0,1,1,1,1,1,1,
+	    0,0,1,1,1,1,0,1,1,1,1,1,1,1,1,0]);
+
+	var tableau_basse = map[niveau.niveau].slice(0);
+	var tableau = map[niveau.niveau];
+
+		//initialisation
+		if(document.getElementById("canvas")){
+
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext("2d");
+
+			canvas.height = 560;
+			canvas.width = 560;
+
+	  		//EFFACE LA FENETRE 
+			afficher();
+		}
+
+		//Afficher la map
+		function afficher(){
+			var i = 0;
+			
+			//EFFACE LA FENETRE
+			ctx.fillStyle = "#f39c12";
+	  		ctx.fillRect(0, 0, 560, 560);
+
+			ctx.fillStyle = "#f1c40f";
+			for(var x = 0;x<16;x++){
+			for(var y = 0;y<16;y++){
+				if(tableau[i] == 1)
+					ctx.fillRect(y*35 +1, x*35+1, 33, 33);
+				else if(tableau[i] == 28){
+					ctx.fillRect(y*35 +1, x*35+1, 33, 33);
+					ctx.fillStyle = "#fff";
+				    ctx.beginPath();
+				    ctx.moveTo(16 	+35*y,6 	+35*x);
+				    ctx.lineTo(6	+35*y,25	+35*x);
+				    ctx.lineTo(27	+35*y,25	+35*x);
+				    ctx.fill();
+				    ctx.fillStyle = "#f1c40f";
+				}
+				++i;
+			}
+			}
+
+		}
+
+		// deplacement
+      	document.onkeydown=function (e){
+      		if(jeux){
+	      		switch(e.keyCode) 
+				{ 
+					case 40: // DOWN	BAS
+						deplacement(0,1);
+					break; 
+					case 38: // UP		HAUT
+						deplacement(0,-1);
+					break; 
+					case 37: // LEFT 	GAUCHE
+						deplacement(-1,0);
+					break;
+					case 39: //RIGHT 	DROIT
+						deplacement(1,0);
+					break;
+				}      			
+      		}
+
+      	}		
+
+		//position
+		function position(){
+			for(var i=0;i<tableau.length;i++){
+				if(tableau[i] == 28)
+					return i;
+			}
+		}
+
+		// Collision
+		function existe(x){
+			if(x>=16 || x<0)
+				return false;
+			else
+				return true;
+		}
+
+		// Deplacement
+		function deplacement(x,y){
+			var i = position();
+			var x2 = i % 16;
+			var y2 = Math.floor(i/16);
+
+			if(existe(x2 + x) && existe(y2 + y)){
+				var x3 = x2 + x;
+				var y3 = y2 + y;
+				if(tableau[x3 + y3 * 16]){
+					tableau[x3 + y3 * 16] = 28;
+					tableau[x2 + y2 * 16] = 0;
+					afficher();
+
+					gagnier();
+				}else
+					perdu();
+			}
+			else
+				perdu();
+		}
+
+
+
+
+		function rejouer(){
+			document.getElementById("perdu").style.display = "none";
+			document.getElementById("gagnier").style.display = "none";
+			document.getElementById("rejouer").style.display = "none";
+			document.getElementById("body").style.display = "none";
+
+			tableau = tableau_basse.slice(0);
+			afficher();
+			jeux = true;
+		}
+
+		//perdu
+		function perdu(){
+			jeux = false;
+			document.getElementById("perdu").style.display = "block";
+			document.getElementById("body").style.display = "block";
+		}
+		
+		//rejouer
+		function AlertRejouer(){
+			jeux = false;
+			document.getElementById("rejouer").style.display = "block";
+			document.getElementById("body").style.display = "block";
+		}
+
+		//Annuler rejouer
+		function annulerRejouer(){
+			jeux = true;
+			document.getElementById("rejouer").style.display = "none";
+			document.getElementById("body").style.display = "none";
+		}
+
+		function gagnier(){
+			for(var i=0;i<tableau.length;i++){
+				if(tableau[i] == 1)
+					return false;
+			}
+
+			jeux = false;
+			if(niveau.niveau != map.length-1){
+				niveau.suivant(map);
+				
+				afficher();
+				document.getElementById("gagnier").style.display = "block";
+				document.getElementById("body").style.display = "block";	
+			}else{
+				document.getElementById("fini").style.display = "block";
+				document.getElementById("body").style.display = "block";
+			}
+
+
+			return true;
+		}
+
+		function continuer(){
+			jeux = true;
+			document.getElementById("gagnier").style.display = "none";
+			document.getElementById("body").style.display = "none";			
+		}
+
+		function Niveau() {
+    		this.niveau = 0;
+      		this.suivant = function(map){
+    			this.niveau +=1;
+    			tableau = map[this.niveau];
+    			tableau_basse = map[this.niveau].slice(0);
+    			this.afficher();
+    		};
+    		this.afficher = function(){
+    			document.getElementById("niveau").innerHTML = "Level : " + (this.niveau+1);
+    		};
+		}
+
+		function cheat(){
+			niveau.suivant(map);
+			afficher();
+			rejouer();
+		}
+	</script>
+</body>
+</html>

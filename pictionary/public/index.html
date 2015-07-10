@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Titre de la page</title>
+    <link rel="stylesheet" href="./style2.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/jquery.min.js"></script>
+
+    <script type="text/javascript" src="js/paper.js"></script>
+    <script type="text/paperscript" src="script.js" canvas="myCanvas"></script>
+</head>
+<body>
+
+    <div id="connection" >
+        <div id="connection-center">
+          <h1>Connection</h1>
+          <input id="connection-pseudo" type="text" placeholder="pseudo" ><br>
+          <button id="connection-submit" >Connection</button>
+        </div>
+    </div>
+
+    
+
+    <header>
+        <h1>Game de Kami</h1>
+        <div id="isPlayer"><h3>Tu es le joueur le mot est : <span id="isPlayerMot"></h3></span></div>
+        <div id="isAutrePlayer">
+            <label for="mot">Le mot est : </label>
+            <form id="FromMot"><input type="text" id="mot"></form>
+        </div>
+    </header>
+
+    <section>
+        <div id="game">
+            <div id="toolbar">
+                <button id="reMove" >Annuler</button>
+                <button id="reClear">Tout Effacer</button>
+                <span id="time">00:00</span>
+            </div>
+            <canvas id="myCanvas" width="540" height="540" ></canvas>      
+        </div>
+
+        <div id="Autre">
+            <button id="Message" >Message</button>
+            <button id="User">utilisateur</button>
+            <div id="time2">0</div>
+            <div id="block">
+              <div id="block2">
+                <div id="Message-block">
+                    <form id="Tchatform"><input type="text" id="message"></form>
+                    <div id="Message-block-message"></div>
+                </div>
+                <div id="User-block" style="display:none;" ></div>
+              </div>
+            </div>
+        </div>        
+    </section>
+
+
+
+    <div id="background-message-info"></div>
+    <div id="message-info"><span class="message"><br></span><br><button id="boutton-ok">ok</button></div>
+</body>
+</html>

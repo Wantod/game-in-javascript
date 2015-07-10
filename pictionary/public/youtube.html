@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="time"></div>
+    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="player"></div>
+    <!--  playerVars: { 'autoplay': 1, 'controls': 1 }, -->
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'yzC4hFK5P3g',
+          playerVars: { 'autoplay': 1, 'controls': 1, 'showinfo' : 0, 'color' : 0, 'disablekb' : 1, 'iv_load_policy' : 3, 'modestbranding' : 1, 'rel' : 0 },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. Quand la video c'est chargé
+      function onPlayerReady(event) {
+        event.target.playVideo();
+        var time = document.getElementById('time');
+        time.innerHTML = getTime(getDuration());
+        setInterval( function(){
+          time.innerHTML = getTime(Math.floor(player.getDuration()-player.getCurrentTime() ) );
+        },100);
+        
+      }
+ 
+      var play = function(){
+        player.playVideo();
+      }
+
+      var stopVideo = function() {
+        player.stopVideo();
+      }
+
+      var pause = function() {
+        player.pauseVideo();
+      }
+
+      var seekTo = function(temps){
+        player.seekTo(temps,true);
+      }
+
+      var newVideo = function(){
+        player.loadVideoById({'videoId': 'c0Px49spM3o'});
+      }
+
+
+      // ---------------------
+      // Volume
+      // ---------------------
+
+      var mute = function(){  // enlevé le son
+        player.mute();
+      }
+
+      var unMute = function(){
+        player.unMute();
+      }
+
+      var setVolume = function(volume){
+        player.setVolume(volume);
+      }
+
+      var getVolume = function(){
+        return player.getVolume();
+      }
+
+      // ---------------------
+      // Statut Video
+      // ---------------------
+      function getDuration(){
+        return player.getDuration();
+      }
+
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 6000);
+          done = true;
+        }
+        if(event.data == YT.PlayerState.PAUSED){
+          //play();
+        }
+      }
+
+
+      // --------------
+      // FONCTION UTILE
+      // --------------
+
+      function getTime(time){
+        var seconde = time % 60;
+        time = (time-seconde) / 60;
+        var minute = time % 60;
+        time = (time-minute) / 60;
+        if(time > 0)
+          var heur = time + ":";
+        else
+          var heur = "";
+
+
+        // faire jolie avec des 00
+        if(minute<10)minute="0"+minute;
+        if(seconde<10)seconde="0"+seconde;
+        //alert( minute + ":" + seconde);
+        return heur + minute + ":" + seconde;
+      }
+
+    </script>
+    <br>
+    <button onclick="mute();">Mute</button>
+    <button onclick="unMute();">unMute</button>
+    <button onclick="play();">play</button>
+    <button onclick="pause();">pause</button>
+    <button onclick="seekTo(40);">seekTo</button>
+    <button onclick="newVideo();">nouvelle video</button>
+  </body>
+</html>

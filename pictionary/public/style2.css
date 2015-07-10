@@ -1,0 +1,448 @@
+*{
+	padding: 0px;
+	margin:0px;
+	z-index: 1;
+}
+
+body{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #4DAF7C;/* #E74C3C;*/
+	color: #FFF;
+	font-size: 14px;
+	/* overflow: hidden; */
+	-webkit-user-select: none;  
+	-moz-user-select: none;    
+	-ms-user-select: none;      
+	user-select: none;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+
+/* Connection */
+#connection{
+	position:fixed;
+	background-color: rgba(135,186,214,0.9) ;
+	width:	100%;
+	height:	100%;
+	top:0px;
+	left:0px;
+	z-index: 3;
+}
+
+#connection-center{
+	background-color: #A4CBE0;
+	position: fixed;
+	width:400px;
+	height:400px;
+	left: 50%;
+	bottom: 50%;
+	border-radius: 50%;
+	text-align:center;
+	margin-left:-200px;
+	margin-bottom: -200px;
+}
+
+#connection h1{
+	margin-top:120px;
+	text-align: center;
+}
+
+/* HEADER */
+header{
+	background-color: #22313F;
+}
+
+header h1{
+	padding: 10px;
+	display: inline-block;
+}
+
+header div{
+	display: inline-block;
+	margin-left: 50px;
+	/* display: none; */
+}
+header #isPlayer, header #isAutrePlayer{
+	
+}
+
+header form{ display: inline-block;}
+header form input{
+	font-size: 20px;
+	margin:10px;
+	padding: 5px;
+}
+
+section{
+	margin:auto;
+	width: 1080px;
+}
+
+/* Game */
+#isPlayerMot{
+	display: inline-block;
+	color: #2ECC71;
+}
+
+#isPlayer{
+	display: none;
+}
+/* GAME */
+
+#game{
+	width: 540px;
+	padding:10px;
+	/* background-color: #E74C3C; */
+	float: left;
+}
+
+#myCanvas{
+	background-color: #FFF;
+	cursor: crosshair;
+	/* border: 10px solid rgb(233, 233, 233); */
+}
+
+#toolbar{
+	width: 540px;
+	padding : 0 0 10px 0;
+}
+#toolbar button{
+	background-color: #049372;
+	width:120px;
+	border: 0;
+	padding: 10px;
+	color: #FFF;
+}
+#time{
+	display: inline-block;
+	background-color: #419267;
+	width: 272px;
+	float:right;
+	text-align: right;
+	font-size: 15px;
+	padding:  10px;
+}
+
+/* MESSAGE & USER */
+#Autre{
+	width: 500px;
+	float: left;
+	margin: 10px;
+}
+
+#Message, #User, #time2{
+	display: inline-block;
+	background-color: #049372;
+	border: 0;
+	width: 130px;
+	padding: 10px;
+	color: #FFF;
+}
+
+#time2{
+	/* width:46%; */
+	width: 212px;
+	background-color: #419267;
+}
+
+#block{
+	padding: 10px 0;
+	width:100%;
+	text-align: center;
+	margin: auto;
+}
+
+#message{
+	width:486px;
+	padding:5px;
+	font-size: 20px;
+}
+
+#Message-block-message{
+	margin: 10px 0;
+	text-align: left;
+	overflow-y: scroll;
+	height: 500px;
+}
+
+#Message-block-message p{
+	word-wrap:break-word;
+	background-color: #2C3E50;
+	padding: 10px;
+	margin:3px 7px 0 0;
+	border-radius: 2px;
+}
+
+#Message-block-message p .pseudo{
+	color: #00B16A;
+}
+
+
+#User-block{
+	margin:  0;
+	text-align: left;
+	overflow-y: scroll;
+	height: 530px;
+}
+
+#User-block p{
+	word-wrap:break-word;
+	display: block;
+	padding: 10px;
+	border-radius: 4px;
+	margin: 3px 7px 0 0;
+}
+
+#User-block p span{
+	word-wrap:break-word;
+	float: right;
+	font-size: 22px;
+	line-height: 100%;
+}
+
+/* Message */
+#message-info{
+	position: absolute;
+	z-index: 100;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 500px;
+	height: 200px;
+	border-radius: 3px;
+	background-color: #336E7B;
+	color: #fff;
+	text-align: center;
+	font-family: 'Open sans';
+	font-size: 2em;
+	margin: auto;
+	padding: 20px 0 0 0;
+	display: none;
+}
+
+#background-message-info{
+	position: absolute;
+	z-index: 99;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(44, 62, 80,0.8);
+	display: none;
+}
+
+#message-info button{
+	width: 70%;
+	margin: 30px;
+	padding: 10px;
+	font-size: 30px;
+	background-color: #22313F;
+
+	color: #FFF;
+	border-radius: 2px;
+	border: 0;
+}
+
+#message-info button:hover {
+	background-color: #050811;
+}
+
+/* body{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #FFFFFF;
+	color: #FFF;
+	font-size: 14px;
+	overflow: hidden;
+	-webkit-user-select: none;  
+	-moz-user-select: none;    
+	-ms-user-select: none;      
+	user-select: none;
+}
+
+#myCanvas{
+	background-color: #FFF;
+	cursor: crosshair;
+	margin: 20px 0 0 50px;
+	border: 10px solid rgb(233, 233, 233);
+}
+
+button,input{
+	background-color: #5AE00A;
+	border:0 solid transparent;
+	padding: 8px;
+	border-radius: 3px;
+	font-size: 30px;
+	cursor: pointer;
+}
+
+button:hover,input:hover{
+	background-color: #8FF751;
+}
+
+button:focus{
+	border : 0px solid transparent;
+}
+
+CONNECTION
+
+#connection{
+	position:fixed;
+	background-color: #87BAD6 ;
+	width:	100%;
+	height:	100%;
+	top:0px;
+	left:0px;
+	z-index: 3;
+}
+
+#connection-center{
+	background-color: #A4CBE0;
+	position: fixed;
+	width:400px;
+	height:400px;
+	left: 50%;
+	bottom: 50%;
+	border-radius: 50%;
+	text-align:center;
+	margin-left:-200px;
+	margin-bottom: -200px;
+}
+
+#connection h1{
+	margin-top:120px;
+	text-align: center;
+}
+
+#connection input{
+	border: 1px solid #AEBAE0;
+	background-color: #AEBAE0;
+	color: #FFF;
+	padding:10px;
+	line-height: 20px;
+	margin-bottom: 10px;
+	transition:0.5s background-color;
+	font-size: 1rem;
+}
+#connection input:hover{
+	background-color: #87A3D6;
+}
+#connection button{
+	background-color: #AEBAE0;
+	border: 1px solid #AEBAE0;
+	padding:8px;
+	border-radius: 10px;
+	width: 200px;
+	font-size: 1rem;
+}
+
+ToolBar
+
+#game{
+	position: absolute;
+	z-index: 2;
+	min-width: 680px;
+}
+
+#toolbar{
+	background-color: #FFFFFF;
+	margin: 20px 50px 0;
+}
+
+#time{
+	background-color: #F06969;
+	border:0 solid transparent;
+	padding: 8px;
+	border-radius: 3px;
+	font-size: 30px;
+	display: inline-block;
+	width: 220px;
+	text-align: right;
+}
+
+Tchat
+#Autre{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	color: red;
+	padding: 20px 0 0 640px;
+	height: 100%;
+	box-sizing: border-box;
+	min-width: 1200px;
+}
+
+#time2{
+	background-color: #ABABEB;
+	border: 0 solid transparent;
+	padding: 8px;
+	border-radius: 3px;
+	font-size: 30px;
+	position: relative;
+	top: -52px;
+	margin: 0 50px 0 302px;
+}
+
+#block{
+	position: absolute;
+	height: 100%;
+	min-height: 652px;
+	height: 652px;
+	width: 100%;
+	padding: 90px 50px 20px 640px;
+	box-sizing: border-box;
+	min-width: 1200px;
+}
+
+#block2{
+	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+Message
+
+#block2 span{
+	padding: 10px;
+	margin: 0px 10px 10px 0px;
+	border-radius: 10px;
+	width: 200px;
+	float: left;
+	overflow-x: hidden;
+}
+
+Message
+#message-info{
+	position: absolute;
+	z-index: 100;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 400px;
+	height: 100px;
+	border-radius: 3px;
+	background-color: #34495e;
+	color: #fff;
+	text-align: center;
+	font-family: 'Open sans';
+	font-size: 2em;
+	margin: auto;
+	padding: 20px 0 0 0;
+	display: none;
+}
+
+#background-message-info{
+	position: absolute;
+	z-index: 99;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	display: none;
+} */

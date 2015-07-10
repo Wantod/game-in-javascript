@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Game</title>
+	<style type="text/css">
+		#canvas{
+			position:absolute;
+			left:50px;top:50px;
+		}
+		#jeux{
+			font-family: Arial;
+			font-size: 20px;
+			width: 200px;
+			float: left;
+		}
+		input{
+			/*width: 100px;*/
+			padding: 7px;
+			margin-top: -7px;
+		}
+	</style>
+</head>
+<body>
+	<div id="jeux"></div>
+	<input type="submit" onclick="raz();" value="Remetre a zero">
+
+	<canvas id="canvas"></canvas>
+
+	<script type="text/javascript">
+		/*
+			2013 par Wanto AS ANTONIN D.
+			PUISSANCE 4 !!!!!!
+
+		*/
+
+		var canvas = document.getElementById('canvas');
+		var jeux = document.getElementById('jeux');
+		var ctx = canvas.getContext("2d");
+		var joueur = 1; // 1 --> ROUGE
+						// 2 --> VERT
+
+		//INITIALISATION
+		var jeu = new Array(7);
+		for(var x= 0;x<7;++x){
+			jeu[x] = new Array();
+			for(var y = 0;y<6;++y){ 
+				jeu[x][y] = 0;
+			}
+		}
+
+		canvas.height = 600;
+		canvas.width = 700;
+
+		ctx.fillStyle = "rgb(100,100,255)";
+      	ctx.fillRect(0, 0, 700, 600);
+      	jeux.innerHTML = "Rouge";
+
+      	//RaZ
+      	function raz(){
+			for(var x= 0;x<7;++x){
+				for(var y = 0;y<6;++y){ 
+					jeu[x][y] = 0;
+				}
+			}
+			afficher();
+      	}
+
+      	
+      	// AFFICHER LA MAP
+      	function afficher(){
+	      	for(var y= 0;y<6;++y){
+	      		for(var x = 0;x<7;++x){
+	      			//ctx.beginPath();
+	      				if(jeu[x][y] == 1)
+	      					ctx.fillStyle = "rgb(255,0,0)";
+	      				else if(jeu[x][y] == 2)
+	      					ctx.fillStyle = "rgb(0,255,0)";
+	      				else
+	      					ctx.fillStyle = "rgb(255,255,255)";
+
+	      				ctx.fillRect(x*100 + 10, y*100 + 10,80, 80);
+	      				//ctx.arc(x*100 + 50, y*100 + 50, 40, 0, 2 * Math.PI);
+	      			//ctx.fill();
+	      		}
+	      	}      		
+      	}
+      	afficher();
+      	
+
+
+      	// Position Du curseur lors du clic
+		function getCursor(e,element) {
+		  e = e || window.event;
+		  return {'x': e.clientX - element.offsetLeft, 'y': e.clientY- element.offsetTop};
+		}
+
+		function pos(x){
+
+			for(var y = 6;y>=0;--y){
+				if(jeu[x][y] == 0){
+					return y;
+				}	
+			}
+			return "E";
+		}
+
+		canvas.addEventListener('click', function(e) {
+	     	//jeux.innerHTML = "Casse : " + Math.floor((getCursor(e,this).x)/100 + 1) ;
+	     	// Lancer La partie
+	     	var position = Math.floor((getCursor(e,this).x)/100);
+
+	     	if(position >= 0 && position <7){
+	     		
+	     		// ON VERIFIE QUE C'EST PAS DEJA REMPLIS
+	     		var position_y = pos(position)
+	     		if( position_y != "E"){
+
+	     			jeu[position][position_y] = joueur;
+	     			if(joueur == 1){
+	     				joueur = 2;
+	     				jeux.innerHTML = "Vert";
+	     			}
+	     			else{
+	     				joueur = 1;
+	     				jeux.innerHTML = "Rouge";
+	     			}
+	     			afficher();
+
+	     			if(gg(position,position_y))
+	     				alert("Tu as gagnier !");
+	     		}
+	     	}
+
+	 	}, false);
+
+		// SAVOIR SI IL A GAGNIER
+		function gg(x,y){
+			var T = 0;
+			var c = 0;
+
+			// ↑
+			for(var i=0;i<6;++i){
+				if(T != jeu[x][i]){
+					T = jeu[x][i];
+					c = 1;
+				}
+				else if(T != 0){
+					++c;
+					if(c == 4)
+						return true;
+				}
+			}
+
+			// RaZ
+			T=0; c = 0;
+
+			//→
+			for(var i=0;i<7;++i){
+				if(T != jeu[i][y]){
+					T = jeu[i][y];
+					c = 1;
+				}
+				else if(T != 0) {
+					++c;
+					if(c
+					 == 4)
+						return true;
+				}
+			}
+
+			// RaZ
+			T=0; c = 0;
+			var x2,y2;
+
+			if(x+y<5){
+				y2 = x+y;
+				x2 = 0;
+			}
+			else{
+				y2 = 5;
+				x2 = x + y - 5;
+			}
+
+			
+			for(var i = 0;x2+i<7 && y2-i>=0;++i){
+
+				if(T != jeu[x2+i][y2-i]){
+					T = jeu[x2+i][y2-i];
+					c = 1;
+				}
+				else if(T != 0) {
+					++c;
+					if(c == 4)
+						return true;
+				}
+			}
+
+			if(x-y>=0){
+				y2 = 0;
+				x2 = x-y;
+			}
+			else{
+				y2 = y-x;
+				x2 = 0;
+			}
+
+			for(var i = 0;x2+i<7 && y2+i<6;++i){
+
+				if(T != jeu[x2+i][y2+i]){
+					T = jeu[x2+i][y2+i];
+					c = 1;
+				}
+				else if(T != 0) {
+					++c;
+					if(c == 4)
+						return true;
+				}
+			}
+
+			return false;
+		}
+
+		/*function getScrollCursor(e){
+		  e = e || window.event;
+		  var curScrollX = (e.pageX)? e.pageX : e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		  var curScrollY = (e.pageY)? e.pageY : e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+		  return {'x': curScrollX, 'y': curScrollY};
+		}*/
+	</script>
+</body>
+</html>

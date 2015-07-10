@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Game</title>
+	<style type="text/css">
+		#canvas{
+			position:absolute;
+			left:50px;top:50px;
+		}
+		#coder{
+			font-family: Arial;
+			font-size: 12px;
+			padding: 5px;
+			
+			position: absolute;
+			margin-left: 600px;
+			background-color: #000;
+			color:#fff;
+
+
+		}
+		input{
+			width: 100px;
+			padding: 7px;
+			margin-top: -7px;
+		}
+	</style>
+</head>
+<body>
+	<input type="submit" id="code" value="code">
+	<div id="coder"></div>
+	<canvas id="canvas"></canvas>
+
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext("2d");
+
+		canvas.height = 560;
+		canvas.width = 560;
+
+		//EFFACE LA FENETRE
+		ctx.fillStyle = "rgb(0,0,0)";
+  		ctx.fillRect(0, 0, 560, 560);
+
+		//la map
+		var tableau = new Array(
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+
+		// Code
+		function afficherCode(){
+			var code = "";
+			for(var i=0;i<tableau.length;i++){
+					code += tableau[i] + (i!=tableau.length-1? "," : "" );
+				if(i%16 == 15 && i/16 < 15)
+					code += "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
+			}
+		    document.getElementById("coder").innerHTML = "	map.push([<br>&nbsp;&nbsp;&nbsp;&nbsp;"+code+"]);";
+		}
+
+		function changePosition(x,y){
+			if(x>=16) x = 15; if(y>=16) y = 15;
+
+			var i = x + y * 16;
+			if(tableau[i])
+				tableau[i]=0;
+			else
+				tableau[i]=1;
+		}
+
+		canvas.addEventListener('mouseup',function(event) {
+			var position = getCursor(event,this);
+			position.x = Math.floor(position.x / 35);
+			position.y = Math.floor(position.y / 35);
+			changePosition(position.x,position.y);
+			afficher();
+			document.getElementById("coder").innerHTML = position.x+":"+position.y;
+		},false);
+
+
+
+
+
+		function getCursor(e,element) {
+		  e = e || window.event;
+		  return {'x': e.clientX - element.offsetLeft, 'y': e.clientY- element.offsetTop};
+		}
+
+		document.getElementById("code").addEventListener('click', function(e) {
+			afficherCode()
+		}, false);
+
+		//Afficher la map
+		function afficher(){
+			var i = 0;
+			
+			//EFFACE LA FENETRE
+			ctx.fillStyle = "rgb(0,0,0)";
+	  		ctx.fillRect(0, 0, 560, 560);
+
+			ctx.fillStyle = "#008C23";
+			for(var x = 0;x<16;x++){
+			for(var y = 0;y<16;y++){
+				if(tableau[i] == 1)
+					ctx.fillRect(y*35 +1, x*35+1, 33, 33);
+				++i;
+			}
+			}
+
+		}			
+	</script>
+</body>
+</html>
